@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:techknowlogy/admin/admin.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:techknowlogy/pages/home.dart';
@@ -12,7 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 final routes = RouteMap(
   routes: {
     '/': (route) => const TabPage(
-          child: MyApp(),
+          child: Wrapper(),
           paths: ['/home', '/talks', '/newsletter'],
         ),
     '/home': (route) => const MaterialPage(child: Home()),
@@ -34,22 +35,20 @@ Future<void> main() async {
         appId: "1:177114260648:web:6b1d243efeaec2cbe7ce9d"),
   );
   setPathUrlStrategy();
-  runApp(Sizer(builder: (context, orientation, deviceType) {
-    return MaterialApp.router(
-      routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
-      routeInformationParser: const RoutemasterParser(),
-      title: 'Tech-know-logy club',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          textSelectionTheme: const TextSelectionThemeData(
-            selectionColor: ceruleanSelect,
-          ),
-          scaffoldBackgroundColor: primaryColor,
-          fontFamily: 'FiraSans'),
-    );
-  }));
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    builder: (context, widget) => ResponsiveWrapper.builder(const MyApp(),
+        maxWidth: 1200,
+        minWidth: 480,
+        defaultScale: true,
+        breakpoints: [
+          const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
+          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
+          const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
+        ],
+        background: Container(color: const Color(0xFFF5F5F5))),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -58,7 +57,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const Wrapper();
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp.router(
+        routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
+        routeInformationParser: const RoutemasterParser(),
+        title: 'Tech-know-logy club',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            textSelectionTheme: const TextSelectionThemeData(
+              selectionColor: ceruleanSelect,
+            ),
+            scaffoldBackgroundColor: primaryColor,
+            fontFamily: 'FiraSans'),
+      );
+    });
   }
 }
 

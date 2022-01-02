@@ -27,9 +27,16 @@ class _AddTalkState extends State<AddTalk> {
   final imgController = TextEditingController();
   final recordingController = TextEditingController();
   final descriptionController = TextEditingController();
-
+  final dateController = TextEditingController();
+  DateTime? date = DateTime.now();
   String _aestheticColor =
       kAestheticColors[Random().nextInt(kAestheticColors.length)];
+  @override
+  void initState() {
+    dateController.text = DateFormat.yMMMMd('en_US').format(date as DateTime);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -99,8 +106,29 @@ class _AddTalkState extends State<AddTalk> {
                     child: TextFormField(
                       controller: keyinsightsController,
                       decoration: kinputDecorationtextFieldTheme.copyWith(
-                          labelText: 'Key Insights'),
+                          labelText: 'Key Insights (optional)'),
                       maxLines: 10,
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: dateController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Date of publication'),
+                      onTap: () async {
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: date as DateTime,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100));
+                        dateController.text =
+                            DateFormat.yMMMMd('en_US').format(date as DateTime);
+                      },
                     )),
                 SizedBox(
                   height: 5.h,
@@ -201,10 +229,7 @@ class _AddTalkState extends State<AddTalk> {
                                             Text(
                                               DateFormat.yMMMMd('en_US')
                                                   .format(DateTime.now()),
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 12,
-                                                  color: Colors.black54),
+                                              style: kLightTextStyle,
                                             ),
                                             FittedBox(
                                               fit: BoxFit.fitWidth,
@@ -292,12 +317,12 @@ class _AddTalkState extends State<AddTalk> {
                             color: darkblue,
                             size: 50,
                           ));
-                      final now = DateTime.now();
+
                       final result = await FirebaseApi.createTalk(Talk(
                           title: titleController.text,
                           bgHex: _aestheticColor,
                           imglink: imgController.text,
-                          date: now,
+                          date: date,
                           recordingUrl: recordingController.text,
                           description: descriptionController.text,
                           keyInsights: keyinsightsController.text));
@@ -305,8 +330,11 @@ class _AddTalkState extends State<AddTalk> {
                       if (result != 'error') {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text('Added talk to database succesfully!'),
-                          backgroundColor: Colors.greenAccent,
+                          content: Text(
+                            'Added talk to database succesfully!',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          backgroundColor: cyanSuccessVarntLight,
                         ));
                         titleController.clear();
                         keyinsightsController.clear();

@@ -7,6 +7,7 @@ const darkblueLoading = Color(0xff373795);
 const cerulean = Color(0xff7A9CC6);
 const ceruleanSelect = Color(0xffBCD6F4);
 const cyanDark = Color(0xff3E8989);
+const cyanSuccessVarntLight = Color(0xff9CD3D3);
 const bittersweet = Color(0xffF87060);
 
 final kLoadingIndicator = SpinKitPulse(
@@ -36,7 +37,9 @@ BoxShadow kBoxShadow1 = BoxShadow(
     blurRadius: 8,
     offset: const Offset(2, 2));
 const kBorderRadius = BorderRadius.all(Radius.circular(10));
-const kHeading1Style = TextStyle(fontWeight: FontWeight.w500, fontSize: 40);
+const kHeading1Style = TextStyle(fontWeight: FontWeight.w500, fontSize: 27);
+const kLightTextStyle =
+    TextStyle(fontWeight: FontWeight.w300, fontSize: 12, color: Colors.black54);
 List kAestheticColors = [
   'B9DFDF',
   'F4CDD0',

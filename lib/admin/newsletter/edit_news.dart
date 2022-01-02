@@ -1,41 +1,61 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/api/firebase_api.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:techknowlogy/models/news_model.dart';
+import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AddNews extends StatefulWidget {
-  const AddNews({Key? key}) : super(key: key);
+class EditNews extends StatefulWidget {
+  final News newsdata;
+  const EditNews({Key? key, required this.newsdata}) : super(key: key);
 
   @override
-  _AddNewsState createState() => _AddNewsState();
+  _EditNewsState createState() => _EditNewsState();
 }
 
-class _AddNewsState extends State<AddNews> {
+class _EditNewsState extends State<EditNews> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final dateController = TextEditingController();
-  var date = DateTime.now();
+  DateTime? date;
   @override
   void initState() {
-    dateController.text = DateFormat.yMMMMd('en_US').format(date);
+    titleController.text = widget.newsdata.title.toString();
+    contentController.text = widget.newsdata.content.toString();
+    dateController.text =
+        DateFormat.yMMMMd('en_US').format(widget.newsdata.date as DateTime);
+    date = widget.newsdata.date;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 13.h),
-      child: SingleChildScrollView(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Edit Talk',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: SingleChildScrollView(
         child: Center(
           child: Form(
             key: _formKey,
@@ -67,7 +87,6 @@ class _AddNewsState extends State<AddNews> {
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Content'),
                       maxLines: 10,
-                      validator: (val) => val!.isNotEmpty ? null : 'Required',
                     )),
                 SizedBox(
                   height: 5.h,
@@ -81,15 +100,13 @@ class _AddNewsState extends State<AddNews> {
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Date of publication'),
                       onTap: () async {
-                        final datePicker = await showDatePicker(
+                        date = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
+                            initialDate: widget.newsdata.date as DateTime,
                             firstDate: DateTime(1900),
                             lastDate: DateTime(2100));
-
-                        date = datePicker as DateTime;
                         dateController.text =
-                            DateFormat.yMMMMd('en_US').format(date);
+                            DateFormat.yMMMMd('en_US').format(date as DateTime);
                       },
                     )),
                 SizedBox(
@@ -127,7 +144,7 @@ class _AddNewsState extends State<AddNews> {
                                           height: 20,
                                         ),
                                         Text(
-                                          Utils.formatDate(date),
+                                          Utils.formatDate(date as DateTime),
                                           style: kLightTextStyle,
                                         ),
                                         const SizedBox(
@@ -135,7 +152,7 @@ class _AddNewsState extends State<AddNews> {
                                         ),
                                         AutoSizeText(
                                           'Week in Tech: ' +
-                                              titleController.text,
+                                              widget.newsdata.title.toString(),
                                           style: const TextStyle(fontSize: 20),
                                           maxLines: 2,
                                         )
@@ -208,28 +225,30 @@ class _AddNewsState extends State<AddNews> {
                             color: darkblue,
                             size: 50,
                           ));
-                      final result = await FirebaseApi.createNews(News(
+                      final updatedNews = News(
                           title: titleController.text,
                           content: contentController.text,
-                          date: date));
+                          date: date,
+                          id: widget.newsdata.id);
+                      final result = await FirebaseApi.updateNews(updatedNews);
                       Loader.hide();
+                      // if (false) {
                       if (result != 'error') {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text(
-                            'Added news to database succesfully!',
+                            'Updated talk in database succesfully!',
                             style: TextStyle(color: Colors.black),
                           ),
                           backgroundColor: cyanSuccessVarntLight,
                         ));
-                        titleController.clear();
-                        contentController.clear();
+                        Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           backgroundColor: bittersweet,
                           content: Text(
-                              'An error occured while trying to add to database.'),
+                              'An error occured while trying to update in database.'),
                         ));
                       }
                     }
@@ -241,7 +260,7 @@ class _AddNewsState extends State<AddNews> {
                         child: Text(
                           'Save',
                           style: kHeading1Style.copyWith(
-                              fontSize: 30, color: primaryColor),
+                              fontSize: 7.sp, color: primaryColor),
                         ),
                       ),
                       height: 10.h,

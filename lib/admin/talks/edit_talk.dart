@@ -40,7 +40,8 @@ class _EditTalkState extends State<EditTalk> {
     recordingController.text = widget.talkdata.recordingUrl.toString();
     descriptionController.text = widget.talkdata.description.toString();
     _aestheticColor = widget.talkdata.bgHex.toString();
-    dateController.text = widget.talkdata.date.toString().substring(0, 10);
+    dateController.text =
+        DateFormat.yMMMMd('en_US').format(widget.talkdata.date as DateTime);
     date = widget.talkdata.date;
     super.initState();
   }
@@ -145,7 +146,8 @@ class _EditTalkState extends State<EditTalk> {
                             initialDate: widget.talkdata.date as DateTime,
                             firstDate: DateTime(1900),
                             lastDate: DateTime(2100));
-                        dateController.text = date.toString().substring(0, 10);
+                        dateController.text =
+                            DateFormat.yMMMMd('en_US').format(date as DateTime);
                       },
                     )),
                 SizedBox(
@@ -354,8 +356,11 @@ class _EditTalkState extends State<EditTalk> {
                       if (result != 'error') {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text('Added talk to database succesfully!'),
-                          backgroundColor: Colors.greenAccent,
+                          content: Text(
+                            'Updated talk in database succesfully!',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          backgroundColor: cyanSuccessVarntLight,
                         ));
                         Navigator.pop(context);
                       } else {
