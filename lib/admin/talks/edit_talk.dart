@@ -13,28 +13,54 @@ import 'package:html/dom.dart' as dom;
 import 'package:techknowlogy/models/talk_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AddTalk extends StatefulWidget {
-  const AddTalk({Key? key}) : super(key: key);
+class EditTalk extends StatefulWidget {
+  final Talk talkdata;
+  const EditTalk({Key? key, required this.talkdata}) : super(key: key);
 
   @override
-  _AddTalkState createState() => _AddTalkState();
+  _EditTalkState createState() => _EditTalkState();
 }
 
-class _AddTalkState extends State<AddTalk> {
+class _EditTalkState extends State<EditTalk> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final keyinsightsController = TextEditingController();
   final imgController = TextEditingController();
   final recordingController = TextEditingController();
   final descriptionController = TextEditingController();
-
+  final dateController = TextEditingController();
   String _aestheticColor =
       kAestheticColors[Random().nextInt(kAestheticColors.length)];
+  DateTime? date;
+  @override
+  void initState() {
+    titleController.text = widget.talkdata.title.toString();
+    keyinsightsController.text = widget.talkdata.keyInsights.toString();
+    imgController.text = widget.talkdata.imglink.toString();
+    recordingController.text = widget.talkdata.recordingUrl.toString();
+    descriptionController.text = widget.talkdata.description.toString();
+    _aestheticColor = widget.talkdata.bgHex.toString();
+    dateController.text = widget.talkdata.date.toString().substring(0, 10);
+    date = widget.talkdata.date;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 13.h),
-      child: SingleChildScrollView(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Edit Talk',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: SingleChildScrollView(
         child: Center(
           child: Form(
             key: _formKey,
@@ -101,6 +127,26 @@ class _AddTalkState extends State<AddTalk> {
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Key Insights'),
                       maxLines: 10,
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: dateController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Date of publication'),
+                      onTap: () async {
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: widget.talkdata.date as DateTime,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100));
+                        dateController.text = date.toString().substring(0, 10);
+                      },
                     )),
                 SizedBox(
                   height: 5.h,
@@ -292,27 +338,26 @@ class _AddTalkState extends State<AddTalk> {
                             color: darkblue,
                             size: 50,
                           ));
-                      final now = DateTime.now();
-                      final result = await FirebaseApi.createTalk(Talk(
+                      final updatedTalk = Talk(
                           title: titleController.text,
                           bgHex: _aestheticColor,
                           imglink: imgController.text,
-                          date: now,
+                          date: date,
                           recordingUrl: recordingController.text,
                           description: descriptionController.text,
-                          keyInsights: keyinsightsController.text));
+                          keyInsights: keyinsightsController.text,
+                          id: widget.talkdata.id);
+                      print(updatedTalk.toJson());
+                      final result = await FirebaseApi.updateTalk(updatedTalk);
                       Loader.hide();
+                      // if (false) {
                       if (result != 'error') {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text('Added talk to database succesfully!'),
                           backgroundColor: Colors.greenAccent,
                         ));
-                        titleController.clear();
-                        keyinsightsController.clear();
-                        imgController.clear();
-                        recordingController.clear();
-                        descriptionController.clear();
+                        Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
