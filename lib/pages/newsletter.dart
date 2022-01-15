@@ -48,12 +48,12 @@ class _NewsletterState extends State<Newsletter> {
                     latestNews(News.fromJson(snapshot.data!.docs.first.data()!
                         as Map<String, dynamic>)),
                     const SizedBox(
-                      height: 20,
+                      height: 50,
                     ),
                     const Align(
                       alignment: Alignment.center,
                       child: SelectableText(
-                        "All news",
+                        "All newsletters",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 34,

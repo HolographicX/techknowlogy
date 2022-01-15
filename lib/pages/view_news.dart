@@ -53,6 +53,49 @@ class _ViewNewsState extends State<ViewNews> {
             return SingleChildScrollView(
               child: Stack(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 130, 20.w, 0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 50.w,
+                            child: Text(
+                              "Week in tech: " + newsfromdata.title.toString(),
+                              style: kHeading1Style,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 50.w,
+                            child: Align(
+                              alignment: const Alignment(-1, 0),
+                              child: Text(
+                                Utils.formatDate(newsfromdata.date as DateTime),
+                                style: kLightTextStyle,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Html(data: """
+<style>
+
+p.light {
+  font-weight: lighter;
+  font-size: 14;
+}
+</style>
+                          
+                          <p class="light">${newsfromdata.content}</p>""")
+                        ],
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 100.w, width: 100.w, child: const Header()),
                 ],
               ),
