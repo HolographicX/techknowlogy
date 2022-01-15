@@ -95,6 +95,7 @@ class _AddTalkState extends State<AddTalk> {
                       controller: descriptionController,
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Short Description'),
+                      maxLines: 2,
                       validator: (val) => val!.isNotEmpty ? null : 'Required',
                     )),
                 SizedBox(

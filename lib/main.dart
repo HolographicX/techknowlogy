@@ -5,6 +5,7 @@ import 'package:techknowlogy/constants.dart';
 import 'package:techknowlogy/pages/home.dart';
 import 'package:techknowlogy/pages/newsletter.dart';
 import 'package:techknowlogy/pages/talks.dart';
+import 'package:techknowlogy/secrets.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:sizer/sizer.dart';
@@ -26,15 +27,9 @@ final routes = RouteMap(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-        apiKey: "AIzaSyBvNi9BnEuCBSmtO-C_zsIIEGNAfcjxbrM",
-        authDomain: "tech-know-logy-website.firebaseapp.com",
-        projectId: "tech-know-logy-website",
-        storageBucket: "tech-know-logy-website.appspot.com",
-        messagingSenderId: "177114260648",
-        appId: "1:177114260648:web:6b1d243efeaec2cbe7ce9d"),
+    options: firebaseOptions,
   );
-  setPathUrlStrategy();
+  // setPathUrlStrategy();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     builder: (context, widget) => ResponsiveWrapper.builder(const MyApp(),
@@ -43,7 +38,7 @@ Future<void> main() async {
         defaultScale: true,
         breakpoints: [
           const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          const ResponsiveBreakpoint.autoScaleDown(800, name: TABLET),
           const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
           const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
         ],
@@ -92,6 +87,17 @@ class _WrapperState extends State<Wrapper> {
   FontWeight homeFont = FontWeight.normal;
   FontWeight talksFont = FontWeight.normal;
   FontWeight newsFont = FontWeight.normal;
+  @override
+  void initState() {
+    homeColor = defaultabColor;
+    talksColor = defaultabColor;
+    newsColor = defaultabColor;
+    homeFont = FontWeight.normal;
+    newsFont = FontWeight.normal;
+    talksFont = FontWeight.normal;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final tabPage = TabPage.of(context);
