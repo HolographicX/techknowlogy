@@ -1,92 +1,75 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:techknowlogy/admin/admin.dart';
-import 'package:techknowlogy/constants.dart';
-import 'package:techknowlogy/pages/home.dart';
-import 'package:techknowlogy/pages/newsletter.dart';
-import 'package:techknowlogy/pages/talks.dart';
-import 'package:techknowlogy/pages/view_news.dart';
-import 'package:techknowlogy/pages/view_talk.dart';
-import 'package:techknowlogy/secrets.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:techknowlogy/models/news_model.dart';
+import 'package:techknowlogy/models/talk_model.dart';
+import 'package:techknowlogy/models/utils.dart';
+import 'package:techknowlogy/pages/talks.dart';
+import '../constants.dart';
 import 'package:sizer/sizer.dart';
-import 'package:firebase_core/firebase_core.dart';
 
-final routes = RouteMap(
-  routes: {
-    '/': (route) => const TabPage(
-          child: Wrapper(),
-          paths: ['/home', '/talks', '/newsletter'],
-        ),
-    '/home': (route) => const MaterialPage(child: Home()),
-    '/viewtalk/:id': (route) => MaterialPage(
-          child: ViewTalk(talkID: route.pathParameters['id']),
-        ),
-    '/talks': (route) => const MaterialPage(child: Talks()),
-    '/newsletter': (route) => const MaterialPage(child: Newsletter()),
-    '/viewnews/:id': (route) => MaterialPage(
-          child: ViewNews(newsID: route.pathParameters['id']),
-        ),
-    '/admin': (route) => const MaterialPage(child: Admin()),
-  },
-);
+import '../main.dart';
+import 'home.dart';
+import 'newsletter.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: firebaseOptions,
-  );
-  // setPathUrlStrategy();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    builder: (context, widget) => ResponsiveWrapper.builder(const MyApp(),
-        maxWidth: 1200,
-        minWidth: 480,
-        defaultScale: true,
-        breakpoints: [
-          const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScaleDown(800, name: TABLET),
-          const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
-          const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
-        ],
-        background: Container(color: const Color(0xFFF5F5F5))),
-  ));
+class ViewNews extends StatefulWidget {
+  final String? newsID;
+  const ViewNews({Key? key, required this.newsID}) : super(key: key);
+
+  @override
+  State<ViewNews> createState() => _ViewNewsState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
+class _ViewNewsState extends State<ViewNews> {
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp.router(
-        routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
-        routeInformationParser: const RoutemasterParser(),
-        title: 'Tech-know-logy club',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            textSelectionTheme: const TextSelectionThemeData(
-              selectionColor: ceruleanSelect,
-            ),
-            scaffoldBackgroundColor: primaryColor,
-            backgroundColor: primaryColor,
-            fontFamily: 'FiraSans'),
-      );
-    });
+    return Scaffold(
+      body: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('news')
+              .doc(widget.newsID)
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Text(
+                  "Something went wrong, try reloading the page.");
+            }
+
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return const Text("Talk does not exist!");
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: kLoadingIndicator);
+            }
+
+            final newsfromdata = News(
+              title: snapshot.data!['title'],
+              date: Utils.toDateTime(snapshot.data!['date']),
+              content: snapshot.data!['content'],
+              id: snapshot.data!['id'],
+            );
+            return SingleChildScrollView(
+              child: Stack(
+                children: [
+                  SizedBox(height: 100.w, width: 100.w, child: const Header()),
+                ],
+              ),
+            );
+          }),
+    );
   }
 }
 
-class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+class Header extends StatefulWidget {
+  const Header({Key? key}) : super(key: key);
 
   @override
-  State<Wrapper> createState() => _WrapperState();
+  State<Header> createState() => _HeaderState();
 }
 
-class _WrapperState extends State<Wrapper> {
+class _HeaderState extends State<Header> {
   bool menuSelected = false;
   static const defaultabColor = Color(0xff8C8C85);
   Color homeColor = defaultabColor;
@@ -108,33 +91,10 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final tabPage = TabPage.of(context);
-    switch (tabPage.index) {
-      case 0:
-        homeColor = cerulean;
-        homeFont = FontWeight.w500;
-        break;
-      case 1:
-        talksColor = cerulean;
-        talksFont = FontWeight.w500;
-        break;
-      case 2:
-        newsColor = cerulean;
-        newsFont = FontWeight.w500;
-        break;
-    }
     const List pages = [Home(), Talks(), Newsletter()];
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(children: [
-        // TabBarView(
-        //   controller: tabPage.controller,
-        //   children: [
-        //     for (final stack in tabPage.stacks)
-        //       PageStackNavigator(stack: stack),
-        //   ],
-        // ),
-        pages[tabPage.index],
         AnimatedPositioned(
             curve: Curves.easeOut,
             duration: const Duration(milliseconds: 500),
@@ -176,30 +136,26 @@ class _WrapperState extends State<Wrapper> {
                               });
                             },
                             child: MouseRegion(
-                              child: Text(
-                                'Home',
-                                style: TextStyle(
-                                    color: homeColor,
-                                    fontSize: 16,
-                                    fontWeight: homeFont),
-                              ),
-                              cursor: SystemMouseCursors.click,
-                              onHover: (event) => {
-                                setState(() {
-                                  homeColor = cerulean;
-                                  homeFont = FontWeight.w500;
-                                })
-                              },
-                              onExit: (event) => {
-                                if (tabPage.index != 0)
-                                  {
-                                    setState(() {
-                                      homeColor = defaultabColor;
-                                      homeFont = FontWeight.normal;
-                                    })
-                                  }
-                              },
-                            ),
+                                child: Text(
+                                  'Home',
+                                  style: TextStyle(
+                                      color: homeColor,
+                                      fontSize: 16,
+                                      fontWeight: homeFont),
+                                ),
+                                cursor: SystemMouseCursors.click,
+                                onHover: (event) => {
+                                      setState(() {
+                                        homeColor = cerulean;
+                                        homeFont = FontWeight.w500;
+                                      })
+                                    },
+                                onExit: (event) => {
+                                      setState(() {
+                                        homeColor = defaultabColor;
+                                        homeFont = FontWeight.normal;
+                                      })
+                                    }),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -230,13 +186,10 @@ class _WrapperState extends State<Wrapper> {
                                       })
                                     },
                                 onExit: (event) => {
-                                      if (tabPage.index != 1)
-                                        {
-                                          setState(() {
-                                            talksColor = defaultabColor;
-                                            talksFont = FontWeight.normal;
-                                          })
-                                        },
+                                      setState(() {
+                                        talksColor = defaultabColor;
+                                        talksFont = FontWeight.normal;
+                                      })
                                     }),
                           ),
                           GestureDetector(
@@ -268,13 +221,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 2)
-                                  {
-                                    setState(() {
-                                      newsColor = defaultabColor;
-                                      newsFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  newsColor = defaultabColor;
+                                  newsFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),
@@ -341,13 +291,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 0)
-                                  {
-                                    setState(() {
-                                      homeColor = defaultabColor;
-                                      homeFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  homeColor = defaultabColor;
+                                  homeFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),
@@ -379,13 +326,10 @@ class _WrapperState extends State<Wrapper> {
                                       })
                                     },
                                 onExit: (event) => {
-                                      if (tabPage.index != 1)
-                                        {
-                                          setState(() {
-                                            talksColor = defaultabColor;
-                                            talksFont = FontWeight.normal;
-                                          })
-                                        },
+                                      setState(() {
+                                        talksColor = defaultabColor;
+                                        talksFont = FontWeight.normal;
+                                      })
                                     }),
                           ),
                           GestureDetector(
@@ -416,13 +360,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 2)
-                                  {
-                                    setState(() {
-                                      newsColor = defaultabColor;
-                                      newsFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  newsColor = defaultabColor;
+                                  newsFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),
