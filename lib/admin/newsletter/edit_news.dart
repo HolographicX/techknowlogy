@@ -1,18 +1,14 @@
-import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/api/firebase_api.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:techknowlogy/models/news_model.dart';
-import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 

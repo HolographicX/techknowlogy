@@ -1,88 +1,181 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:techknowlogy/admin/admin.dart';
-import 'package:techknowlogy/constants.dart';
-import 'package:techknowlogy/pages/home.dart';
-import 'package:techknowlogy/pages/newsletter.dart';
-import 'package:techknowlogy/pages/talks.dart';
-import 'package:techknowlogy/pages/view_talk.dart';
-import 'package:techknowlogy/secrets.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:techknowlogy/models/talk_model.dart';
+import 'package:techknowlogy/models/utils.dart';
+import 'package:techknowlogy/pages/talks.dart';
+import '../constants.dart';
 import 'package:sizer/sizer.dart';
-import 'package:firebase_core/firebase_core.dart';
 
-final routes = RouteMap(
-  routes: {
-    '/': (route) => const TabPage(
-          child: Wrapper(),
-          paths: ['/home', '/talks', '/newsletter'],
-        ),
-    '/home': (route) => const MaterialPage(child: Home()),
-    '/viewtalk/:id': (route) => MaterialPage(
-          child: ViewTalk(talkID: route.pathParameters['id']),
-        ),
-    '/talks': (route) => const MaterialPage(child: Talks()),
-    '/newsletter': (route) => const MaterialPage(child: Newsletter()),
-    '/admin': (route) => const MaterialPage(child: Admin()),
-  },
-);
+import '../main.dart';
+import 'home.dart';
+import 'newsletter.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: firebaseOptions,
-  );
-  // setPathUrlStrategy();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    builder: (context, widget) => ResponsiveWrapper.builder(const MyApp(),
-        maxWidth: 1200,
-        minWidth: 480,
-        defaultScale: true,
-        breakpoints: [
-          const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScaleDown(800, name: TABLET),
-          const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
-          const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
-        ],
-        background: Container(color: const Color(0xFFF5F5F5))),
-  ));
+class ViewTalk extends StatefulWidget {
+  final String? talkID;
+  const ViewTalk({Key? key, required this.talkID}) : super(key: key);
+
+  @override
+  State<ViewTalk> createState() => _ViewTalkState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
+class _ViewTalkState extends State<ViewTalk> {
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp.router(
-        routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
-        routeInformationParser: const RoutemasterParser(),
-        title: 'Tech-know-logy club',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            textSelectionTheme: const TextSelectionThemeData(
-              selectionColor: ceruleanSelect,
-            ),
-            scaffoldBackgroundColor: primaryColor,
-            backgroundColor: primaryColor,
-            fontFamily: 'FiraSans'),
-      );
-    });
+    return Scaffold(
+      body: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('talks')
+              .doc(widget.talkID)
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Text(
+                  "Something went wrong, try reloading the page.");
+            }
+
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return const Text("Talk does not exist!");
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: kLoadingIndicator);
+            }
+
+            final talkfromdata = Talk(
+              title: snapshot.data!['title'],
+              bgHex: snapshot.data!['bgHex'],
+              imglink: snapshot.data!['imglink'],
+              date: Utils.toDateTime(snapshot.data!['date']),
+              recordingUrl: snapshot.data!['recordingUrl'],
+              keyInsights: snapshot.data!['keyInsights'],
+              description: snapshot.data!['description'],
+              id: snapshot.data!['id'],
+            );
+            return SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 350,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: SelectableText(
+                                talkfromdata.title as String,
+                                style: kHeading1Style.copyWith(fontSize: 35),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 13,
+                          ),
+                          SizedBox(
+                            width: 320,
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: const Alignment(-0.95, 0),
+                                  child: Text(
+                                    Utils.formatDate(
+                                        talkfromdata.date as DateTime),
+                                    style: kLightTextStyle,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: 230,
+                                      width: 320,
+                                      decoration: BoxDecoration(
+                                          color: Color(int.parse(
+                                                      talkfromdata.bgHex
+                                                          .toString(),
+                                                      radix: 16) +
+                                                  0xFF000000)
+                                              .withOpacity(0.3),
+                                          borderRadius: kBorderRadius),
+                                    ),
+                                    Container(
+                                      height: 180,
+                                      width: 130,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              talkfromdata.imglink.toString()),
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Align(
+                            alignment: Alignment(-0.9, 0),
+                            child: SelectableText(
+                              "Recording",
+                              style: kHeading1Style,
+                            ),
+                          ),
+                          Html(data: """
+                          <iframe src="${talkfromdata.recordingUrl}" width="640" height="480" align="middle" allow="autoplay"></iframe>
+                          """),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Visibility(
+                            visible:
+                                talkfromdata.keyInsights == "" ? false : true,
+                            child: const Align(
+                              alignment: Alignment(-1, 0),
+                              child: SelectableText(
+                                "Key Insights",
+                                style: kHeading1Style,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            child: Html(data: """
+                            <p>${talkfromdata.keyInsights}</p>
+                            """),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 100.w, width: 100.w, child: const Header()),
+                ],
+              ),
+            );
+          }),
+    );
   }
 }
 
-class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+class Header extends StatefulWidget {
+  const Header({Key? key}) : super(key: key);
 
   @override
-  State<Wrapper> createState() => _WrapperState();
+  State<Header> createState() => _HeaderState();
 }
 
-class _WrapperState extends State<Wrapper> {
+class _HeaderState extends State<Header> {
   bool menuSelected = false;
   static const defaultabColor = Color(0xff8C8C85);
   Color homeColor = defaultabColor;
@@ -104,33 +197,10 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final tabPage = TabPage.of(context);
-    switch (tabPage.index) {
-      case 0:
-        homeColor = cerulean;
-        homeFont = FontWeight.w500;
-        break;
-      case 1:
-        talksColor = cerulean;
-        talksFont = FontWeight.w500;
-        break;
-      case 2:
-        newsColor = cerulean;
-        newsFont = FontWeight.w500;
-        break;
-    }
     const List pages = [Home(), Talks(), Newsletter()];
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(children: [
-        // TabBarView(
-        //   controller: tabPage.controller,
-        //   children: [
-        //     for (final stack in tabPage.stacks)
-        //       PageStackNavigator(stack: stack),
-        //   ],
-        // ),
-        pages[tabPage.index],
         AnimatedPositioned(
             curve: Curves.easeOut,
             duration: const Duration(milliseconds: 500),
@@ -172,30 +242,26 @@ class _WrapperState extends State<Wrapper> {
                               });
                             },
                             child: MouseRegion(
-                              child: Text(
-                                'Home',
-                                style: TextStyle(
-                                    color: homeColor,
-                                    fontSize: 16,
-                                    fontWeight: homeFont),
-                              ),
-                              cursor: SystemMouseCursors.click,
-                              onHover: (event) => {
-                                setState(() {
-                                  homeColor = cerulean;
-                                  homeFont = FontWeight.w500;
-                                })
-                              },
-                              onExit: (event) => {
-                                if (tabPage.index != 0)
-                                  {
-                                    setState(() {
-                                      homeColor = defaultabColor;
-                                      homeFont = FontWeight.normal;
-                                    })
-                                  }
-                              },
-                            ),
+                                child: Text(
+                                  'Home',
+                                  style: TextStyle(
+                                      color: homeColor,
+                                      fontSize: 16,
+                                      fontWeight: homeFont),
+                                ),
+                                cursor: SystemMouseCursors.click,
+                                onHover: (event) => {
+                                      setState(() {
+                                        homeColor = cerulean;
+                                        homeFont = FontWeight.w500;
+                                      })
+                                    },
+                                onExit: (event) => {
+                                      setState(() {
+                                        homeColor = defaultabColor;
+                                        homeFont = FontWeight.normal;
+                                      })
+                                    }),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -226,13 +292,10 @@ class _WrapperState extends State<Wrapper> {
                                       })
                                     },
                                 onExit: (event) => {
-                                      if (tabPage.index != 1)
-                                        {
-                                          setState(() {
-                                            talksColor = defaultabColor;
-                                            talksFont = FontWeight.normal;
-                                          })
-                                        },
+                                      setState(() {
+                                        talksColor = defaultabColor;
+                                        talksFont = FontWeight.normal;
+                                      })
                                     }),
                           ),
                           GestureDetector(
@@ -264,13 +327,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 2)
-                                  {
-                                    setState(() {
-                                      newsColor = defaultabColor;
-                                      newsFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  newsColor = defaultabColor;
+                                  newsFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),
@@ -337,13 +397,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 0)
-                                  {
-                                    setState(() {
-                                      homeColor = defaultabColor;
-                                      homeFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  homeColor = defaultabColor;
+                                  homeFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),
@@ -375,13 +432,10 @@ class _WrapperState extends State<Wrapper> {
                                       })
                                     },
                                 onExit: (event) => {
-                                      if (tabPage.index != 1)
-                                        {
-                                          setState(() {
-                                            talksColor = defaultabColor;
-                                            talksFont = FontWeight.normal;
-                                          })
-                                        },
+                                      setState(() {
+                                        talksColor = defaultabColor;
+                                        talksFont = FontWeight.normal;
+                                      })
                                     }),
                           ),
                           GestureDetector(
@@ -412,13 +466,10 @@ class _WrapperState extends State<Wrapper> {
                                 })
                               },
                               onExit: (event) => {
-                                if (tabPage.index != 2)
-                                  {
-                                    setState(() {
-                                      newsColor = defaultabColor;
-                                      newsFont = FontWeight.normal;
-                                    })
-                                  }
+                                setState(() {
+                                  newsColor = defaultabColor;
+                                  newsFont = FontWeight.normal;
+                                })
                               },
                             ),
                           ),

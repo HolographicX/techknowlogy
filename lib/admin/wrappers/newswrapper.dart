@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/admin/newsletter/add_news.dart';
 import 'package:techknowlogy/admin/newsletter/modify_news.dart';
-import 'package:techknowlogy/admin/talks/add_talk.dart';
-import 'package:techknowlogy/admin/talks/modify_talk.dart';
 import 'package:techknowlogy/constants.dart';
 
 class NewsWrapper extends StatefulWidget {

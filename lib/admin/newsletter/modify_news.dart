@@ -7,7 +7,6 @@ import 'package:techknowlogy/admin/newsletter/edit_news.dart';
 import 'package:techknowlogy/api/firebase_api.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:techknowlogy/models/news_model.dart';
-import 'package:techknowlogy/models/talk_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/models/utils.dart';
 

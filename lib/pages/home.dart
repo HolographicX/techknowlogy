@@ -14,14 +14,14 @@ class _HomeState extends State<Home> {
       body: Stack(
         children: <Widget>[
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              // width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('background-top-home.png'),
-                  fit: BoxFit.fill,
-                ),
-              )),
+            image: DecorationImage(
+              image: AssetImage('background-top-home.png'),
+              fit: BoxFit.fill,
+            ),
+          )),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
