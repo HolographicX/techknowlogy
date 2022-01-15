@@ -83,14 +83,12 @@ class _ViewNewsState extends State<ViewNews> {
                             height: 40,
                           ),
                           Html(data: """
-<style>
-
-p.light {
-  font-weight: lighter;
-  font-size: 14;
-}
-</style>
-                          
+                            <style>
+                              p.light {
+                                font-weight: lighter;
+                                font-size: 14;
+                              }
+                              </style>
                           <p class="light">${newsfromdata.content}</p>""")
                         ],
                       ),

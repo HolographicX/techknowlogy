@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:techknowlogy/admin/admin.dart';
+import 'package:techknowlogy/admin/enter_admin_password.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:techknowlogy/pages/home.dart';
 import 'package:techknowlogy/pages/newsletter.dart';
@@ -27,7 +28,7 @@ final routes = RouteMap(
     '/viewnews/:id': (route) => MaterialPage(
           child: ViewNews(newsID: route.pathParameters['id']),
         ),
-    '/admin': (route) => const MaterialPage(child: Admin()),
+    '/admin': (route) => const MaterialPage(child: EnterAdminPassword()),
   },
 );
 
