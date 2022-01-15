@@ -358,7 +358,7 @@ class _OpeningTextsState extends State<OpeningTexts> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               const SizedBox(
