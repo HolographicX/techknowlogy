@@ -42,10 +42,20 @@ class _TalksState extends State<Talks> {
                     const SizedBox(height: 40),
                     const OpeningTexts(),
                     const SizedBox(height: 150),
-                    latestTalk(Talk.fromJson(snapshot.data!.docs.first.data()!
-                        as Map<String, dynamic>)),
-                    const SizedBox(
-                      height: 20,
+                    Visibility(
+                      visible: MediaQuery.of(context).size.width > 800
+                          ? true
+                          : false,
+                      child: latestTalk(Talk.fromJson(snapshot.data!.docs.first
+                          .data()! as Map<String, dynamic>)),
+                    ),
+                    Visibility(
+                      visible: MediaQuery.of(context).size.width > 800
+                          ? true
+                          : false,
+                      child: const SizedBox(
+                        height: 20,
+                      ),
                     ),
                     const Align(
                       alignment: Alignment.center,
@@ -60,9 +70,12 @@ class _TalksState extends State<Talks> {
                     const SizedBox(
                       height: 30,
                     ),
-                    GridView.extent(
+                    GridView.count(
+                        crossAxisCount:
+                            MediaQuery.of(context).size.width > 1200 ? 3 : 2,
+                        physics: const NeverScrollableScrollPhysics(),
                         primary: true,
-                        maxCrossAxisExtent: 400.0,
+                        // maxCrossAxisExtent: 330.0,
                         crossAxisSpacing: 10.0,
                         mainAxisSpacing: 10.0,
                         shrinkWrap: true,

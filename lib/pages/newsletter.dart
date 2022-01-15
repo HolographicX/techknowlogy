@@ -64,6 +64,7 @@ class _NewsletterState extends State<Newsletter> {
                       height: 30,
                     ),
                     ListView(
+                        physics: const NeverScrollableScrollPhysics(),
                         primary: true,
                         shrinkWrap: true,
                         children: snapshot.data!.docs

@@ -301,7 +301,7 @@ class _WrapperState extends State<Wrapper> {
                   style: TextStyle(
                       fontFamily: 'FiraCode',
                       fontWeight: FontWeight.w600,
-                      fontSize: 3.h),
+                      fontSize: 20),
                 ),
 
                 const Expanded(child: SizedBox()),

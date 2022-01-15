@@ -94,7 +94,7 @@ class _ViewNewsState extends State<ViewNews> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 100.w, width: 100.w, child: const Header()),
+                  SizedBox(height: 100.h, width: 100.w, child: const Header()),
                 ],
               ),
             );
@@ -291,7 +291,7 @@ class _HeaderState extends State<Header> {
                   style: TextStyle(
                       fontFamily: 'FiraCode',
                       fontWeight: FontWeight.w600,
-                      fontSize: 3.h),
+                      fontSize: 20),
                 ),
 
                 const Expanded(child: SizedBox()),
