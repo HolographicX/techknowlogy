@@ -70,25 +70,46 @@ class _TalksState extends State<Talks> {
                     const SizedBox(
                       height: 30,
                     ),
-                    GridView.count(
-                        crossAxisCount:
-                            MediaQuery.of(context).size.width > 1200 ? 3 : 2,
-                        physics: const NeverScrollableScrollPhysics(),
-                        primary: true,
-                        // maxCrossAxisExtent: 330.0,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                        shrinkWrap: true,
-                        children: snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          Map<String, dynamic> data =
-                              document.data()! as Map<String, dynamic>;
-                          Talk talkfromdata = Talk.fromJson(data);
-                          // if (snapshot.data!.docs.first.data().toString() !=
-                          //     data.toString()) {
-                          return talkGrid(talkfromdata);
-                          // }
-                        }).toList()),
+                    LayoutBuilder(builder: (context, constraints) {
+                      if (constraints.maxWidth > 400) {
+                        return GridView.extent(
+                            // crossAxisCount:
+                            // MediaQuery.of(context).size.width > 1200 ? 3 : 2,
+                            physics: const NeverScrollableScrollPhysics(),
+                            primary: true,
+                            maxCrossAxisExtent: 400.0,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                            shrinkWrap: true,
+                            children: snapshot.data!.docs
+                                .map((DocumentSnapshot document) {
+                              Map<String, dynamic> data =
+                                  document.data()! as Map<String, dynamic>;
+                              Talk talkfromdata = Talk.fromJson(data);
+                              // if (snapshot.data!.docs.first.data().toString() !=
+                              //     data.toString()) {
+                              return talkGrid(talkfromdata);
+                              // }
+                            }).toList());
+                      } else {
+                        return ListView(
+                            // crossAxisCount:
+                            // MediaQuery.of(context).size.width > 1200 ? 3 : 2,
+                            physics: const NeverScrollableScrollPhysics(),
+                            primary: true,
+                            shrinkWrap: true,
+                            children: snapshot.data!.docs
+                                .map((DocumentSnapshot document) {
+                              Map<String, dynamic> data =
+                                  document.data()! as Map<String, dynamic>;
+                              Talk talkfromdata = Talk.fromJson(data);
+                              // if (snapshot.data!.docs.first.data().toString() !=
+                              //     data.toString()) {
+                              return talkGrid(talkfromdata);
+                              // }
+                            }).toList());
+                      }
+                    }),
                   ],
                 ),
               ),
@@ -228,7 +249,7 @@ class _TalksState extends State<Talks> {
           Routemaster.of(context).push("/viewtalk/$talkId");
         },
         child: SizedBox(
-          height: 400,
+          height: 340,
           width: 230,
           child: Column(
             children: [

@@ -290,7 +290,7 @@ class _HeaderState extends State<Header> {
                   'Tech-know-logy club',
                   style: TextStyle(
                       fontFamily: 'FiraCode',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: 20),
                 ),
 
