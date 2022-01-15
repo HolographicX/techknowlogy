@@ -27,11 +27,22 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_size_text: ^3.0.0
+  cloud_firestore: ^3.1.5
   cupertino_icons: ^1.0.2
-  fluro: ^2.0.3
   flutter:
     sdk: flutter
+  flutter_html: ^2.2.1
+  flutter_overlay_loader: ^1.0.3
+  flutter_spinkit: ^5.1.0
+  google_nav_bar: ^5.0.5
+  intl: ^0.17.0
+  line_icons: ^2.0.1
+  provider: ^6.0.2
+  responsive_framework: ^0.1.5
   routemaster: ^0.9.5
+  sizer: ^2.0.15
+  url_launcher: ^6.0.17
   url_strategy: ^0.2.0
 
 dev_dependencies:
