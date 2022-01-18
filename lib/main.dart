@@ -46,7 +46,7 @@ Future<void> main() async {
         defaultScale: true,
         breakpoints: [
           const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScaleDown(800, name: TABLET),
+          const ResponsiveBreakpoint.autoScaleDown(900, name: TABLET),
           const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
           const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
         ],
