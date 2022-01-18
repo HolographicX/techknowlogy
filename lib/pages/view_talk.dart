@@ -4,13 +4,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
-import 'package:techknowlogy/pages/talks.dart';
 import '../constants.dart';
 import 'package:sizer/sizer.dart';
 
-import '../main.dart';
-import 'home.dart';
-import 'newsletter.dart';
 
 class ViewTalk extends StatefulWidget {
   final String? talkID;
@@ -197,7 +193,6 @@ class _HeaderState extends State<Header> {
 
   @override
   Widget build(BuildContext context) {
-    const List pages = [Home(), Talks(), Newsletter()];
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(children: [
@@ -351,11 +346,11 @@ class _HeaderState extends State<Header> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
+                const Text(
                   'Tech-know-logy club',
                   style: TextStyle(
                       fontFamily: 'FiraCode',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: 20),
                 ),
 

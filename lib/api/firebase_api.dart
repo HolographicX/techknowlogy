@@ -14,8 +14,7 @@ class FirebaseApi {
       talk.id = talkDoc.id;
       await talkDoc.set(talk.toJson());
       return talkDoc.id;
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }
@@ -28,8 +27,7 @@ class FirebaseApi {
       final talkdoc = _talksCollection.doc(talk.id);
       await talkdoc.update(talk.toJson());
       return talkdoc.id;
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }
@@ -39,8 +37,7 @@ class FirebaseApi {
       final talkdoc = _talksCollection.doc(talk.id);
       await talkdoc.delete();
       return "${talkdoc.id} deleted";
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }
@@ -54,8 +51,7 @@ class FirebaseApi {
       news.id = newsDoc.id;
       await newsDoc.set(news.toJson());
       return newsDoc.id;
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }
@@ -68,8 +64,7 @@ class FirebaseApi {
       final newsdoc = _newsCollection.doc(news.id);
       await newsdoc.update(news.toJson());
       return newsdoc.id;
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }
@@ -79,8 +74,7 @@ class FirebaseApi {
       final newsdoc = _newsCollection.doc(news.id);
       await newsdoc.delete();
       return "${newsdoc.id} deleted";
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       return 'error';
     }
   }

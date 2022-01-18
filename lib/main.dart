@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:techknowlogy/admin/admin.dart';
 import 'package:techknowlogy/admin/enter_admin_password.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:techknowlogy/pages/home.dart';
@@ -46,7 +45,7 @@ Future<void> main() async {
         defaultScale: true,
         breakpoints: [
           const ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScaleDown(800, name: TABLET),
+          const ResponsiveBreakpoint.autoScaleDown(900, name: TABLET),
           const ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
           const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
         ],
@@ -296,11 +295,11 @@ class _WrapperState extends State<Wrapper> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
+                const Text(
                   'Tech-know-logy club',
                   style: TextStyle(
                       fontFamily: 'FiraCode',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: 20),
                 ),
 

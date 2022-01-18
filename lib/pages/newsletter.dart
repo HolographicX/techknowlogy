@@ -1,17 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/api/firebase_api.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/models/news_model.dart';
-import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
 
-import 'home.dart';
-import 'newsletter.dart';
 
 class Newsletter extends StatefulWidget {
   const Newsletter({Key? key}) : super(key: key);
