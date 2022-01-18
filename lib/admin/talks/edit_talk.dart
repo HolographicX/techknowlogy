@@ -350,7 +350,6 @@ class _EditTalkState extends State<EditTalk> {
                           description: descriptionController.text,
                           keyInsights: keyinsightsController.text,
                           id: widget.talkdata.id);
-                      print(updatedTalk.toJson());
                       final result = await FirebaseApi.updateTalk(updatedTalk);
                       Loader.hide();
                       // if (false) {

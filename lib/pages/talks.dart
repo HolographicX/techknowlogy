@@ -7,8 +7,6 @@ import 'package:techknowlogy/constants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/models/talk_model.dart';
 
-import 'home.dart';
-import 'newsletter.dart';
 
 class Talks extends StatefulWidget {
   const Talks({Key? key}) : super(key: key);

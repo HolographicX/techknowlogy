@@ -1,7 +1,5 @@
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +21,6 @@ class _HomeState extends State<Home> {
       }
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -221,7 +218,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 90,),
+                      const SizedBox(height: 90,),
                       const Align(
                   alignment: Alignment(0, -1),
                   child: Text("Icons from Flaticon", style: TextStyle(color: Colors.black54),)),
@@ -260,7 +257,7 @@ class Card1 extends StatelessWidget {
                 color: Colors.black.withOpacity(0.15),
                 blurRadius: 53,
                 offset: const Offset(9, 16))
-          ], color: Color(0xffC4CADD), borderRadius: kBorderRadius),
+          ], color: const Color(0xffC4CADD), borderRadius: kBorderRadius),
           child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -337,7 +334,7 @@ class Card2 extends StatelessWidget {
                         child: Image.network(
                             "https://cdn-icons-png.flaticon.com/512/179/179323.png"),
                       ),
-                      SizedBox(width: 20,),
+                      const SizedBox(width: 20,),
                       SizedBox(
                         height: 64,
                         width: 64,
@@ -350,7 +347,7 @@ class Card2 extends StatelessWidget {
               )),
             ),
             Transform.translate(
-              offset: Offset(-150,-100),
+              offset: const Offset(-150,-100),
               child: Align(
                 alignment: const Alignment(0, 0),
                 child: SizedBox(
