@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
       return MaterialApp.router(
         routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
         routeInformationParser: const RoutemasterParser(),
-        title: 'Tech-know-logy club',
+        title: 'Tech-know-logy Club',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             splashColor: Colors.transparent,
@@ -296,7 +296,7 @@ class _WrapperState extends State<Wrapper> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 const Text(
-                  'Tech-know-logy club',
+                  'Tech-know-logy Club',
                   style: TextStyle(
                       fontFamily: 'FiraCode',
                       fontWeight: FontWeight.w500,

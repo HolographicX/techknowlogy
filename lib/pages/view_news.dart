@@ -281,7 +281,7 @@ class _HeaderState extends State<Header> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 const Text(
-                  'Tech-know-logy club',
+                  'Tech-know-logy Club',
                   style: TextStyle(
                       fontFamily: 'FiraCode',
                       fontWeight: FontWeight.w500,
