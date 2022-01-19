@@ -74,9 +74,10 @@ class _HomeState extends State<Home> {
       ),
 
                     child: Text(
-                      "Tech-know-logy club",
+                      "Tech-know-logy Club",
                         style: kHeading1Style.copyWith(
                             fontSize: 40,
+                            fontWeight: FontWeight.w600
                                   ),
                                   ),
                   ),
@@ -253,7 +254,7 @@ class Card1 extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: (){
-          
+          launch("https://drive.google.com/drive/u/1/folders/1y8M_wr2LAlfsDbPDD0MfQExO6VHkdTKl");
         },
         child: Container(
           height: 220,
