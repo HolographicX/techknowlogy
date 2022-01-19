@@ -62,18 +62,24 @@ class _HomeState extends State<Home> {
                 Positioned(
                   top: 200,
                   left: width > 500 ? 60 : null,
-                  child: Text("Tech-know-logy club",
-                      style: kHeading1Style.copyWith(
-                          fontSize: 40,
-                          foreground: Paint()
-                            ..shader = const LinearGradient(
-                              colors: <Color>[
-                                Color(0xff1D1D4E),
-                                Color(0xff56B3B3)
-                                //add more color here.
-                              ],
-                            ).createShader(
-                                const Rect.fromLTWH(0.0, 0.0, 400.0, 100.0)))),
+                  child: ShaderMask(
+                    blendMode: BlendMode.srcIn,
+      shaderCallback: (bounds) => const  LinearGradient(
+                                colors: <Color>[
+                                  Color(0xff1D1D4E),
+                                  Color(0xff56B3B3)
+                                ],
+                              ).createShader(
+        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+      ),
+
+                    child: Text(
+                      "Tech-know-logy club",
+                        style: kHeading1Style.copyWith(
+                            fontSize: 40,
+                                  ),
+                                  ),
+                  ),
                 ),
                 Positioned(
                   top:  330,
