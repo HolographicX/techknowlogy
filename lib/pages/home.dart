@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +23,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
+    var presentationWidth = MediaQuery.of(context).size.width *0.9;
+    var presentationHeight = MediaQuery.of(context).size.height *0.7;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -173,7 +175,7 @@ class _HomeState extends State<Home> {
               // alignment: Alignment.center,
               children: [
                 Container(
-                    height: width <= 500 ? MediaQuery.of(context).size.height * 2: MediaQuery.of(context).size.height*1.1,
+                    height: width <= 500 ? MediaQuery.of(context).size.height * 3: MediaQuery.of(context).size.height*2.1,
                     decoration:  const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('background-bottom-home.png'),
@@ -196,15 +198,16 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         width: width > 500 ? 500 : 300,
                         child: SelectableText(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                          "Tech-know-logy Club was founded by Dhriti Reddy and Mrudgandh Kumbhar, students of B.D. Somani International School, in 2021. Our purpose is to spread awareness and be in-align with the latest technological happenings around the globe. We believe technology alone can tremendously transform industries as a whole. As numerous state-of-the-art trends and movements in technology emerge, join Tech-know-logy Club to be at the forefront of this paradigm.",
                           style: TextStyle(
                               fontWeight: FontWeight.w300,
                               fontSize: 18,
                               color: Colors.black.withOpacity(0.9)),
                         ),
                       ),
+                      
                       const SizedBox(
-                        height: 120,
+                        height: 30,
                       ),
                       Visibility(
                         visible: width > 500 ? true : false,
@@ -225,6 +228,12 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Html(data: """
+                          <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
+                          """),
                       const SizedBox(height: 90,),
                       const Align(
                   alignment: Alignment(0, -1),
