@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
@@ -144,8 +145,8 @@ class _ViewTalkState extends State<ViewTalk> {
                             ),
                           ),
                           SizedBox(
-                            child: Html(data: """
-                            <p>${talkfromdata.keyInsights}</p>
+                            child: HtmlWidget("""
+                            ${talkfromdata.keyInsights}
                             """),
                           ),
                           const SizedBox(

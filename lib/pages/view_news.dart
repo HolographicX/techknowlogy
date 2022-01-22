@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/models/news_model.dart';
 import 'package:techknowlogy/models/utils.dart';
 import '../constants.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 
 class ViewNews extends StatefulWidget {
@@ -17,6 +17,8 @@ class ViewNews extends StatefulWidget {
 }
 
 class _ViewNewsState extends State<ViewNews> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,14 +79,21 @@ class _ViewNewsState extends State<ViewNews> {
                           const SizedBox(
                             height: 40,
                           ),
-                          Html(data: """
-                            <style>
-                              p.light {
-                                font-weight: lighter;
-                                font-size: 14;
-                              }
-                              </style>
-                          <p class="light">${newsfromdata.content}</p>""")
+                          HtmlWidget("""
+                          ${newsfromdata.content}
+                          """),
+                          const SizedBox(
+                            height: 40,
+                          ),
+
+                          // Html(data: """
+                          //   <style>
+                          //     p.light {
+                          //       font-weight: lighter;
+                          //       font-size: 14;
+                          //     }
+                          //     </style>
+                          // <p class="light">${newsfromdata.content}</p>""")
                         ],
                       ),
                     ),
