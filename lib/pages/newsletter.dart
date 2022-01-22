@@ -209,7 +209,8 @@ class _NewsletterState extends State<Newsletter> {
                   ),
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 30,),
           ],
         ),
       ),

@@ -8,7 +8,6 @@ import '../constants.dart';
 
 class Utils {
   static DateTime toDateTime(Timestamp value) {
-    print("yes");
     return value.toDate();
   }
 
