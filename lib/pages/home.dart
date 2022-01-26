@@ -263,7 +263,7 @@ class Card1 extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: (){
-          launch("https://drive.google.com/drive/u/1/folders/1y8M_wr2LAlfsDbPDD0MfQExO6VHkdTKl");
+          launch("https://drive.google.com/file/d/1-cfgVlvrx2DuwTZZb45JLIASMu0LKO2v/view");
         },
         child: Container(
           height: 220,
