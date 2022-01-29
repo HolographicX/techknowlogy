@@ -18,8 +18,11 @@ class ViewTalk extends StatefulWidget {
 }
 
 class _ViewTalkState extends State<ViewTalk> {
+  
   @override
   Widget build(BuildContext context) {
+    final videoheight = MediaQuery.of(context).size.width < 500 ? 35.h : 80.h;
+  final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
@@ -127,9 +130,16 @@ class _ViewTalkState extends State<ViewTalk> {
                               style: kHeading1Style,
                             ),
                           ),
-                          Html(data: """
-                          <iframe src="${talkfromdata.recordingUrl}" width="640" height="480" align="middle" allow="autoplay"></iframe>
-                          """),
+                          const SizedBox(height: 20,),
+                          Center(
+                            child: SizedBox(
+                              height: videoheight,
+                              width: videowidth,
+                              child: Html(data: """
+                              <iframe src="${talkfromdata.recordingUrl}" width="$videowidth" height="$videoheight" align="middle" allow="autoplay"></iframe>
+                              """),
+                            ),
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
