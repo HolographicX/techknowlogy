@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -220,7 +221,7 @@ class _TalksState extends State<Talks> {
                             talkfromdata.description.toString(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w300, fontSize: 12),
-                            maxLines: 4,
+                            maxLines: 6,
                           )
                         ],
                       ),
@@ -312,11 +313,14 @@ class _TalksState extends State<Talks> {
                                 style: kHeading1Style.copyWith(fontSize: 30),
                               ),
                             ),
-                            SelectableText(
-                              talkfromdata.description.toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 12),
-                              maxLines: 4,
+                            const SizedBox(height: 8,),
+                            Flexible(
+                              child: SelectableText(
+                                talkfromdata.description.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 12),
+                              maxLines: 6,
+                              ),
                             )
                           ],
                         ),
