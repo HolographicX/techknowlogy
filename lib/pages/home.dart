@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -233,7 +236,7 @@ class _HomeState extends State<Home> {
                       ),
                       Html(data: """
                           <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
-                          """),
+                          """,),
                       const SizedBox(height: 90,),
                       const Align(
                   alignment: Alignment(0, -1),
