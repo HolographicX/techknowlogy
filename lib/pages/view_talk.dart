@@ -21,8 +21,8 @@ class ViewTalk extends StatefulWidget {
 class _ViewTalkState extends State<ViewTalk> {
   @override
   Widget build(BuildContext context) {
-    final videoheight = MediaQuery.of(context).size.width < 500 ? 35.h : 80.h;
-    final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
+    final videoheight = 60.h;
+    final videowidth = 50.w;
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
