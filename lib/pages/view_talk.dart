@@ -21,8 +21,8 @@ class ViewTalk extends StatefulWidget {
 class _ViewTalkState extends State<ViewTalk> {
   @override
   Widget build(BuildContext context) {
-    final videoheight = MediaQuery.of(context).size.width < 500 ? 35.h : 80.h;
-    final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
+    final videoheight = 60.h;
+    final videowidth = 50.w;
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
@@ -138,11 +138,15 @@ class _ViewTalkState extends State<ViewTalk> {
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                height: 250,
-                                width: 250,
+                                height: MediaQuery.of(context).size.width < 800
+                                    ? 25.w
+                                    : 20.w,
+                                width: MediaQuery.of(context).size.width < 800
+                                    ? 25.w
+                                    : 20.w,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
@@ -165,18 +169,31 @@ class _ViewTalkState extends State<ViewTalk> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Text(
-                                      talkfromdata.speakerName.toString(),
-                                      style:
-                                          kHeading1Style.copyWith(fontSize: 30),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width <
+                                              800
+                                          ? 35.w
+                                          : 20.w,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          talkfromdata.speakerName.toString(),
+                                          style: kHeading1Style.copyWith(
+                                              fontSize: 30),
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 20,
                                     ),
                                     SizedBox(
-                                      width: 300,
+                                      width: MediaQuery.of(context).size.width <
+                                              800
+                                          ? 40.w
+                                          : 25.w,
                                       child: AutoSizeText(
                                         talkfromdata.aboutSpeaker.toString(),
+                                        presetFontSizes: const [12, 9],
                                         maxLines: 8,
                                         overflow: TextOverflow.fade,
                                       ),
@@ -263,8 +280,7 @@ class _ViewTalkState extends State<ViewTalk> {
                             height: 20,
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 190.0),
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: SizedBox(
                               child: HtmlWidget("""
                               <div style="line-height: 1.7;">
