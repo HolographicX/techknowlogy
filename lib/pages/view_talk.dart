@@ -6,6 +6,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 import 'package:sizer/sizer.dart';
 
@@ -150,12 +151,7 @@ class _ViewTalkState extends State<ViewTalk> {
                                         ),
                                         fit: BoxFit.cover),
                                     borderRadius: kBorderRadius,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withAlpha(20),
-                                          blurRadius: 8,
-                                          offset: const Offset(2, -2))
-                                    ]),
+                                    boxShadow: [kBoxShadow1]),
                               ),
                               const SizedBox(
                                 width: 20,
@@ -206,13 +202,47 @@ class _ViewTalkState extends State<ViewTalk> {
                           const SizedBox(
                             height: 35,
                           ),
-                          Center(
-                            child: SizedBox(
-                              height: videoheight,
-                              width: videowidth,
-                              child: Html(data: """
-                              <iframe src="${talkfromdata.recordingUrl}" width="$videowidth" height="$videoheight" align="middle" allow="autoplay"></iframe>
-                              """),
+                          Visibility(
+                            visible: MediaQuery.of(context).size.width < 800
+                                ? false
+                                : true,
+                            child: Center(
+                              child: SizedBox(
+                                height: videoheight,
+                                width: videowidth,
+                                child: Html(data: """
+                                <iframe src="${talkfromdata.recordingUrl}" width="$videowidth" height="$videoheight" align="middle" allow="autoplay"></iframe>
+                                """),
+                              ),
+                            ),
+                          ),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: InkWell(
+                              onTap: () => launch(talkfromdata.recordingUrl
+                                  .toString()
+                                  .substring(
+                                      0,
+                                      talkfromdata.recordingUrl
+                                              .toString()
+                                              .length -
+                                          8)),
+                              child: Container(
+                                height: 40,
+                                width: 200,
+                                child: const Center(
+                                    child: Text("Open In Google Drive")),
+                                decoration: BoxDecoration(
+                                    color: cyanSuccessVarntLight,
+                                    borderRadius: kBorderRadius,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: cyanSuccessVarntLight
+                                              .withAlpha(150),
+                                          blurRadius: 5,
+                                          offset: const Offset(2, 4))
+                                    ]),
+                              ),
                             ),
                           ),
                           const SizedBox(
