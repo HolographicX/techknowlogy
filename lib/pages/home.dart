@@ -234,9 +234,12 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Html(data: """
-                          <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
-                          """,),
+                      Visibility(
+                        visible: MediaQuery.of(context).size.width < 500 ? false: true,
+                        child: Html(data: """
+                            <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
+                            """,),
+                      ),
                       const SizedBox(height: 90,),
                       const Align(
                   alignment: Alignment(0, -1),
