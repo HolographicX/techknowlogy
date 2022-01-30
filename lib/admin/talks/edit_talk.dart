@@ -29,6 +29,9 @@ class _EditTalkState extends State<EditTalk> {
   final recordingController = TextEditingController();
   final descriptionController = TextEditingController();
   final dateController = TextEditingController();
+  final speakerNameController = TextEditingController();
+  final aboutSpeakerController = TextEditingController();
+  final speakerImageUrlController = TextEditingController();
   String _aestheticColor =
       kAestheticColors[Random().nextInt(kAestheticColors.length)];
   DateTime? date;
@@ -39,6 +42,10 @@ class _EditTalkState extends State<EditTalk> {
     imgController.text = widget.talkdata.imglink.toString();
     recordingController.text = widget.talkdata.recordingUrl.toString();
     descriptionController.text = widget.talkdata.description.toString();
+    aboutSpeakerController.text = widget.talkdata.aboutSpeaker.toString();
+    speakerNameController.text = widget.talkdata.speakerName.toString();
+    speakerImageUrlController.text = widget.talkdata.speakerImageUrl.toString();
+
     _aestheticColor = widget.talkdata.bgHex.toString();
     dateController.text =
         DateFormat.yMMMMd('en_US').format(widget.talkdata.date as DateTime);
@@ -116,6 +123,43 @@ class _EditTalkState extends State<EditTalk> {
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Short Description'),
                       maxLines: 2,
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                 SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: speakerNameController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Speaker Name'),
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: aboutSpeakerController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'About the speaker'),
+                          maxLines: 2,
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: speakerImageUrlController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Speaker Image Url'),
                       validator: (val) => val!.isNotEmpty ? null : 'Required',
                     )),
                 SizedBox(
@@ -349,6 +393,9 @@ class _EditTalkState extends State<EditTalk> {
                           recordingUrl: recordingController.text,
                           description: descriptionController.text,
                           keyInsights: keyinsightsController.text,
+                          speakerImageUrl: speakerImageUrlController.text,
+                          speakerName: speakerNameController.text,
+                          aboutSpeaker: aboutSpeakerController.text,
                           id: widget.talkdata.id);
                       final result = await FirebaseApi.updateTalk(updatedTalk);
                       Loader.hide();

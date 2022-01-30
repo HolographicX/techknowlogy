@@ -114,6 +114,44 @@ class _ModifyTalkState extends State<ModifyTalk> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 2.5.sp),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(talkfromdata
+                                                .speakerImageUrl
+                                                .toString()),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        talkfromdata.speakerName.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      const Icon(
+                                        LineIcons.alternateMicrophone,
+                                        color: Colors.black45,
+                                        size: 15,
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),

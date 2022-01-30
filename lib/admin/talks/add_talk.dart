@@ -28,6 +28,11 @@ class _AddTalkState extends State<AddTalk> {
   final recordingController = TextEditingController();
   final descriptionController = TextEditingController();
   final dateController = TextEditingController();
+  final speakerNameController = TextEditingController();
+  final aboutSpeakerController = TextEditingController();
+  final speakerImageUrlController = TextEditingController();
+  
+  
   DateTime? date = DateTime.now();
   String _aestheticColor =
       kAestheticColors[Random().nextInt(kAestheticColors.length)];
@@ -96,6 +101,43 @@ class _AddTalkState extends State<AddTalk> {
                       decoration: kinputDecorationtextFieldTheme.copyWith(
                           labelText: 'Short Description'),
                       maxLines: 2,
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: speakerNameController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Speaker Name'),
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: aboutSpeakerController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'About the speaker'),
+                          maxLines: 2,
+                      validator: (val) => val!.isNotEmpty ? null : 'Required',
+                    )),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                    // height: 30.h,
+                    width: 40.w,
+                    child: TextFormField(
+                      controller: speakerImageUrlController,
+                      decoration: kinputDecorationtextFieldTheme.copyWith(
+                          labelText: 'Speaker Image Url'),
                       validator: (val) => val!.isNotEmpty ? null : 'Required',
                     )),
                 SizedBox(
@@ -326,7 +368,11 @@ class _AddTalkState extends State<AddTalk> {
                           date: date,
                           recordingUrl: recordingController.text,
                           description: descriptionController.text,
-                          keyInsights: keyinsightsController.text));
+                          keyInsights: keyinsightsController.text,
+                        speakerImageUrl: speakerImageUrlController.text,
+                          speakerName: speakerNameController.text,
+                          aboutSpeaker: aboutSpeakerController.text,
+                          ));
                       Loader.hide();
                       if (result != 'error') {
                         ScaffoldMessenger.of(context)
@@ -342,6 +388,9 @@ class _AddTalkState extends State<AddTalk> {
                         imgController.clear();
                         recordingController.clear();
                         descriptionController.clear();
+                        speakerNameController.clear();
+                        aboutSpeakerController.clear();
+                        speakerImageUrlController.clear();
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
