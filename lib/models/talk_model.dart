@@ -11,6 +11,10 @@ class Talk {
   String? id;
   String? description;
   String? recordingUrl;
+  String? speakerName;
+  String? aboutSpeaker;
+  String? speakerImageUrl;
+
   Talk(
       {@required this.title,
       @required this.bgHex,
@@ -18,6 +22,9 @@ class Talk {
       @required this.date,
       @required this.recordingUrl,
       @required this.keyInsights,
+      @required this.speakerName,
+      @required this.speakerImageUrl,
+      @required this.aboutSpeaker,
       this.id,
       required this.description});
   static Talk fromJson(Map<String, dynamic> json) => Talk(
@@ -28,7 +35,12 @@ class Talk {
       bgHex: json['bgHex'],
       imglink: json['imglink'],
       id: json['id'],
-      description: json['description']);
+      description: json['description'],
+      speakerName: json['speakerName'],
+      aboutSpeaker: json['aboutSpeaker'],
+      speakerImageUrl: json['speakerImageUrl'],
+
+      );
   Map<String, dynamic> toJson() => {
         'date': date!.toUtc(),
         'title': title,
@@ -37,6 +49,9 @@ class Talk {
         'imglink': imglink,
         'id': id,
         'description': description,
-        'recordingUrl': recordingUrl
+        'recordingUrl': recordingUrl,
+        'speakerName': speakerName,
+        'aboutSpeaker': aboutSpeaker,
+        'speakerImageUrl': speakerImageUrl,
       };
 }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -5,9 +6,9 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/models/talk_model.dart';
 import 'package:techknowlogy/models/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 import 'package:sizer/sizer.dart';
-
 
 class ViewTalk extends StatefulWidget {
   final String? talkID;
@@ -18,11 +19,10 @@ class ViewTalk extends StatefulWidget {
 }
 
 class _ViewTalkState extends State<ViewTalk> {
-  
   @override
   Widget build(BuildContext context) {
     final videoheight = MediaQuery.of(context).size.width < 500 ? 35.h : 80.h;
-  final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
+    final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
@@ -52,6 +52,9 @@ class _ViewTalkState extends State<ViewTalk> {
               keyInsights: snapshot.data!['keyInsights'],
               description: snapshot.data!['description'],
               id: snapshot.data!['id'],
+              speakerImageUrl: snapshot.data!['speakerImageUrl'],
+              speakerName: snapshot.data!['speakerName'],
+              aboutSpeaker: snapshot.data!['aboutSpeaker'],
             );
             return SingleChildScrollView(
               child: Stack(
@@ -121,43 +124,154 @@ class _ViewTalkState extends State<ViewTalk> {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 40,
                           ),
                           const Align(
-                            alignment: Alignment(-0.9, 0),
+                            alignment: Alignment(-0.7, 0),
                             child: SelectableText(
-                              "Recording",
+                              "About the Speaker",
                               style: kHeading1Style,
-                            ),
-                          ),
-                          const SizedBox(height: 20,),
-                          Center(
-                            child: SizedBox(
-                              height: videoheight,
-                              width: videowidth,
-                              child: Html(data: """
-                              <iframe src="${talkfromdata.recordingUrl}" width="$videowidth" height="$videoheight" align="middle" allow="autoplay"></iframe>
-                              """),
                             ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 250,
+                                width: 250,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          talkfromdata.speakerImageUrl
+                                              .toString(),
+                                        ),
+                                        fit: BoxFit.cover),
+                                    borderRadius: kBorderRadius,
+                                    boxShadow: [kBoxShadow1]),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      talkfromdata.speakerName.toString(),
+                                      style:
+                                          kHeading1Style.copyWith(fontSize: 30),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 300,
+                                      child: AutoSizeText(
+                                        talkfromdata.aboutSpeaker.toString(),
+                                        maxLines: 8,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Align(
+                            alignment: Alignment(-0.7, 0),
+                            child: SelectableText(
+                              "Recording",
+                              style: kHeading1Style,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 35,
+                          ),
+                          Visibility(
+                            visible: MediaQuery.of(context).size.width < 800
+                                ? false
+                                : true,
+                            child: Center(
+                              child: SizedBox(
+                                height: videoheight,
+                                width: videowidth,
+                                child: Html(data: """
+                                <iframe src="${talkfromdata.recordingUrl}" width="$videowidth" height="$videoheight" align="middle" allow="autoplay"></iframe>
+                                """),
+                              ),
+                            ),
+                          ),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: InkWell(
+                              onTap: () => launch(talkfromdata.recordingUrl
+                                  .toString()
+                                  .substring(
+                                      0,
+                                      talkfromdata.recordingUrl
+                                              .toString()
+                                              .length -
+                                          8)),
+                              child: Container(
+                                height: 40,
+                                width: 200,
+                                child: const Center(
+                                    child: Text("Open In Google Drive")),
+                                decoration: BoxDecoration(
+                                    color: cyanSuccessVarntLight,
+                                    borderRadius: kBorderRadius,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: cyanSuccessVarntLight
+                                              .withAlpha(150),
+                                          blurRadius: 5,
+                                          offset: const Offset(2, 4))
+                                    ]),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
                           Visibility(
                             visible:
                                 talkfromdata.keyInsights == "" ? false : true,
                             child: const Align(
-                              alignment: Alignment(-1, 0),
+                              alignment: Alignment(-0.7, 0),
                               child: SelectableText(
                                 "Key Insights",
                                 style: kHeading1Style,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            child: HtmlWidget("""
-                            ${talkfromdata.keyInsights}
-                            """),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 190.0),
+                            child: SizedBox(
+                              child: HtmlWidget("""
+                              <div style="line-height: 1.7;">
+                              ${talkfromdata.keyInsights}
+                              </div>
+                              """),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,

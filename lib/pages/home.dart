@@ -1,9 +1,5 @@
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,15 +15,15 @@ class _HomeState extends State<Home> {
   double _opacity = 1;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    
-      }
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    var presentationWidth = MediaQuery.of(context).size.width *0.9;
-    var presentationHeight = MediaQuery.of(context).size.height *0.7;
+    var presentationWidth = MediaQuery.of(context).size.width * 0.9;
+    var presentationHeight = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -69,28 +65,21 @@ class _HomeState extends State<Home> {
                   left: width > 500 ? 60 : null,
                   child: ShaderMask(
                     blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) => const  LinearGradient(
-                                colors: <Color>[
-                                  Color(0xff1D1D4E),
-                                  Color(0xff56B3B3)
-                                ],
-                              ).createShader(
-        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-      ),
-
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: <Color>[Color(0xff1D1D4E), Color(0xff56B3B3)],
+                    ).createShader(
+                      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                    ),
                     child: Text(
                       "Tech-know-logy Club",
-                        style: kHeading1Style.copyWith(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w600
-                                  ),
-                                  ),
+                      style: kHeading1Style.copyWith(
+                          fontSize: 40, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
                 Positioned(
-                  top:  330,
+                  top: 330,
                   right: width > 500 ? 30 : null,
-                
                   child: SizedBox(
                     width: 400,
                     child: SelectableText(
@@ -178,8 +167,10 @@ class _HomeState extends State<Home> {
               // alignment: Alignment.center,
               children: [
                 Container(
-                    height: width <= 500 ? MediaQuery.of(context).size.height * 3: MediaQuery.of(context).size.height*2.1,
-                    decoration:  const BoxDecoration(
+                    height: width <= 500
+                        ? MediaQuery.of(context).size.height * 3
+                        : MediaQuery.of(context).size.height * 2.1,
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('background-bottom-home.png'),
                         fit: BoxFit.fill,
@@ -208,7 +199,6 @@ class _HomeState extends State<Home> {
                               color: Colors.black.withOpacity(0.9)),
                         ),
                       ),
-                      
                       const SizedBox(
                         height: 30,
                       ),
@@ -222,9 +212,9 @@ class _HomeState extends State<Home> {
                       Visibility(
                         visible: width <= 500 ? true : false,
                         child: Column(
-                          children:  const [
-                             Card1(),
-                             SizedBox(
+                          children: const [
+                            Card1(),
+                            SizedBox(
                               height: 60,
                             ),
                             Card2(),
@@ -234,17 +224,28 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Html(data: """
-                          <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
-                          """,),
-                      const SizedBox(height: 90,),
+                      Visibility(
+                        visible: MediaQuery.of(context).size.width < 500
+                            ? false
+                            : true,
+                        child: Html(
+                          data: """
+                            <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
+                            """,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 90,
+                      ),
                       const Align(
-                  alignment: Alignment(0, -1),
-                  child: Text("Icons from Flaticon", style: TextStyle(color: Colors.black54),)),
+                          alignment: Alignment(0, -1),
+                          child: Text(
+                            "Icons from Flaticon",
+                            style: TextStyle(color: Colors.black54),
+                          )),
                     ],
                   ),
                 ),
-                
               ],
             ),
           ],
@@ -253,7 +254,6 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
 
 class Card1 extends StatelessWidget {
   const Card1({
@@ -265,8 +265,9 @@ class Card1 extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: (){
-          launch("https://drive.google.com/file/d/1-cfgVlvrx2DuwTZZb45JLIASMu0LKO2v/view");
+        onTap: () {
+          launch(
+              "https://drive.google.com/file/d/1-cfgVlvrx2DuwTZZb45JLIASMu0LKO2v/view");
         },
         child: Container(
           height: 220,
@@ -309,7 +310,7 @@ class Card2 extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           launch("https://github.com/HolographicX/techknowlogy");
         },
         child: Stack(
@@ -324,7 +325,6 @@ class Card2 extends StatelessWidget {
                     blurRadius: 53,
                     offset: const Offset(9, 16))
               ], color: const Color(0xffE8D7DC), borderRadius: kBorderRadius),
-      
               child: Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -337,9 +337,10 @@ class Card2 extends StatelessWidget {
                     width: 300,
                     child: FittedBox(
                       fit: BoxFit.fitWidth,
-                      child:  Text(
+                      child: Text(
                         "Like this website? The best way to show your appreciation\nis to star the repository!",
-                        style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300, fontSize: 12),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -353,7 +354,9 @@ class Card2 extends StatelessWidget {
                         child: Image.network(
                             "https://cdn-icons-png.flaticon.com/512/179/179323.png"),
                       ),
-                      const SizedBox(width: 20,),
+                      const SizedBox(
+                        width: 20,
+                      ),
                       SizedBox(
                         height: 64,
                         width: 64,
@@ -366,14 +369,15 @@ class Card2 extends StatelessWidget {
               )),
             ),
             Transform.translate(
-              offset: const Offset(-150,-100),
+              offset: const Offset(-150, -100),
               child: Align(
                 alignment: const Alignment(0, 0),
                 child: SizedBox(
-                                          height: 48,
-                                          width: 48,
-                                          child: Image.network("https://cdn-icons-png.flaticon.com/512/616/616489.png"),
-                                        ),
+                  height: 48,
+                  width: 48,
+                  child: Image.network(
+                      "https://cdn-icons-png.flaticon.com/512/616/616489.png"),
+                ),
               ),
             )
           ],
