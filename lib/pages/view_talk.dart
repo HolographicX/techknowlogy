@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -8,7 +9,6 @@ import 'package:techknowlogy/models/utils.dart';
 import '../constants.dart';
 import 'package:sizer/sizer.dart';
 
-
 class ViewTalk extends StatefulWidget {
   final String? talkID;
   const ViewTalk({Key? key, required this.talkID}) : super(key: key);
@@ -18,11 +18,10 @@ class ViewTalk extends StatefulWidget {
 }
 
 class _ViewTalkState extends State<ViewTalk> {
-  
   @override
   Widget build(BuildContext context) {
     final videoheight = MediaQuery.of(context).size.width < 500 ? 35.h : 80.h;
-  final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
+    final videowidth = MediaQuery.of(context).size.width < 500 ? 80.w : 70.w;
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
@@ -52,6 +51,9 @@ class _ViewTalkState extends State<ViewTalk> {
               keyInsights: snapshot.data!['keyInsights'],
               description: snapshot.data!['description'],
               id: snapshot.data!['id'],
+              speakerImageUrl: snapshot.data!['speakerImageUrl'],
+              speakerName: snapshot.data!['speakerName'],
+              aboutSpeaker: snapshot.data!['aboutSpeaker'],
             );
             return SingleChildScrollView(
               child: Stack(
@@ -121,16 +123,89 @@ class _ViewTalkState extends State<ViewTalk> {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 40,
                           ),
                           const Align(
-                            alignment: Alignment(-0.9, 0),
+                            alignment: Alignment(-0.7, 0),
+                            child: SelectableText(
+                              "About the Speaker",
+                              style: kHeading1Style,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 250,
+                                width: 250,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          talkfromdata.speakerImageUrl
+                                              .toString(),
+                                        ),
+                                        fit: BoxFit.cover),
+                                    borderRadius: kBorderRadius,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withAlpha(20),
+                                          blurRadius: 8,
+                                          offset: const Offset(2, -2))
+                                    ]),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      talkfromdata.speakerName.toString(),
+                                      style:
+                                          kHeading1Style.copyWith(fontSize: 30),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 300,
+                                      child: AutoSizeText(
+                                        talkfromdata.aboutSpeaker.toString(),
+                                        maxLines: 8,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Align(
+                            alignment: Alignment(-0.7, 0),
                             child: SelectableText(
                               "Recording",
                               style: kHeading1Style,
                             ),
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 35,
+                          ),
                           Center(
                             child: SizedBox(
                               height: videoheight,
@@ -147,7 +222,7 @@ class _ViewTalkState extends State<ViewTalk> {
                             visible:
                                 talkfromdata.keyInsights == "" ? false : true,
                             child: const Align(
-                              alignment: Alignment(-1, 0),
+                              alignment: Alignment(-0.7, 0),
                               child: SelectableText(
                                 "Key Insights",
                                 style: kHeading1Style,
@@ -157,10 +232,16 @@ class _ViewTalkState extends State<ViewTalk> {
                           const SizedBox(
                             height: 20,
                           ),
-                          SizedBox(
-                            child: HtmlWidget("""
-                            ${talkfromdata.keyInsights}
-                            """),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 190.0),
+                            child: SizedBox(
+                              child: HtmlWidget("""
+                              <div style="line-height: 1.7;">
+                              ${talkfromdata.keyInsights}
+                              </div>
+                              """),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,

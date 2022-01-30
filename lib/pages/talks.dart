@@ -2,12 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:techknowlogy/api/firebase_api.dart';
 import 'package:techknowlogy/constants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:techknowlogy/models/talk_model.dart';
-
 
 class Talks extends StatefulWidget {
   const Talks({Key? key}) : super(key: key);
@@ -222,6 +222,44 @@ class _TalksState extends State<Talks> {
                             style: const TextStyle(
                                 fontWeight: FontWeight.w300, fontSize: 12),
                             maxLines: 6,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(talkfromdata
+                                        .speakerImageUrl
+                                        .toString()),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                talkfromdata.speakerName.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(
+                                LineIcons.alternateMicrophone,
+                                color: Colors.black45,
+                                size: 15,
+                              ),
+                            ],
                           )
                         ],
                       ),
@@ -313,14 +351,54 @@ class _TalksState extends State<Talks> {
                                 style: kHeading1Style.copyWith(fontSize: 30),
                               ),
                             ),
-                            const SizedBox(height: 8,),
-                            Flexible(
-                              child: SelectableText(
-                                talkfromdata.description.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 12),
-                              maxLines: 6,
-                              ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            AutoSizeText(
+                              talkfromdata.description.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 9),
+                              presetFontSizes: const [12, 9],
+                              maxLines: 4,
+                              overflow: TextOverflow.fade,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 25,
+                                  width: 25,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(talkfromdata
+                                          .speakerImageUrl
+                                          .toString()),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  talkfromdata.speakerName.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  LineIcons.alternateMicrophone,
+                                  color: Colors.black45,
+                                  size: 12,
+                                ),
+                              ],
                             )
                           ],
                         ),
