@@ -141,7 +141,7 @@ class _ViewTalkState extends State<ViewTalk> {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 40,
                           ),
                           Visibility(
                             visible:
@@ -153,6 +153,9 @@ class _ViewTalkState extends State<ViewTalk> {
                                 style: kHeading1Style,
                               ),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                           SizedBox(
                             child: HtmlWidget("""
