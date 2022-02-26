@@ -233,9 +233,9 @@ class _TalksState extends State<Talks> {
                                 width: 40,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(talkfromdata
-                                        .speakerImageUrl
-                                        .toString()),
+                                    image: NetworkImage(
+                                      talkfromdata.speakerImageUrl.toString(),
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                   shape: BoxShape.circle,

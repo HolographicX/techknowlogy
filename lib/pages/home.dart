@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:techknowlogy/constants.dart';
@@ -13,44 +16,74 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   double _borderWidth = 15;
   double _opacity = 1;
-
+  bool isBackgroundVisible = true;
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+      print(
+          'Running on ${webBrowserInfo.platform}'); // e.g. "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
+
+      if (webBrowserInfo.platform
+                  .toString()
+                  .substring(0, 3)
+                  .toLowerCase() ==
+              "win" ||
+          webBrowserInfo.platform.toString().substring(0, 3).toLowerCase() ==
+              "lin" ||
+          webBrowserInfo.platform.toString().substring(0, 3).toLowerCase() ==
+              "mac") {
+        isBackgroundVisible = true;
+      } else {
+        setState(() {
+          isBackgroundVisible = false;
+        });
+      }
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    var presentationWidth = MediaQuery.of(context).size.width * 0.9;
+    var presentationWidth = MediaQuery.of(context).size.width * 0.7;
     var presentationHeight = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
+      backgroundColor: const Color(0xffE9E4EC),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                Container(
-                    width: MediaQuery.of(context).size.width * 2,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('background-top-home.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    )),
+                Visibility(
+                  visible: isBackgroundVisible,
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 2,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('background-top-home.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      )),
+                ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.25),
                   child: Container(
                       height: MediaQuery.of(context).size.height * 0.75,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('wave-top-home.png'),
-                          fit: BoxFit.fill,
-                        ),
-                      )),
+                      decoration: !isBackgroundVisible
+                          ? null
+                          : const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('wave-top-home.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            )),
                 ),
                 Positioned(
                   top: 150,
@@ -170,12 +203,14 @@ class _HomeState extends State<Home> {
                     height: width <= 500
                         ? MediaQuery.of(context).size.height * 3
                         : MediaQuery.of(context).size.height * 2.1,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('background-bottom-home.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    )),
+                    decoration: !isBackgroundVisible
+                        ? null
+                        : const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('background-bottom-home.png'),
+                              fit: BoxFit.fill,
+                            ),
+                          )),
                 Align(
                   alignment: const Alignment(0, -1),
                   child: Column(
@@ -228,10 +263,16 @@ class _HomeState extends State<Home> {
                         visible: MediaQuery.of(context).size.width < 500
                             ? false
                             : true,
-                        child: Html(
-                          data: """
-                            <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
-                            """,
+                        child: Center(
+                          child: SizedBox(
+                            height: presentationHeight,
+                            width: presentationWidth,
+                            child: Html(
+                              data: """
+                                <iframe src="https://drive.google.com/file/d/15gqtByEjd11E1ypKGQ7CP30dWFpiJsm-/preview" width="$presentationWidth" height="$presentationHeight" align="middle" allow="autoplay"></iframe>
+                                """,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
