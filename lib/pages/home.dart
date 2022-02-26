@@ -16,38 +16,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   double _borderWidth = 15;
   double _opacity = 1;
-  bool isBackgroundVisible = true;
   @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
-      print(
-          'Running on ${webBrowserInfo.platform}'); // e.g. "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
-
-      if (webBrowserInfo.platform
-                  .toString()
-                  .substring(0, 3)
-                  .toLowerCase() ==
-              "win" ||
-          webBrowserInfo.platform.toString().substring(0, 3).toLowerCase() ==
-              "lin" ||
-          webBrowserInfo.platform.toString().substring(0, 3).toLowerCase() ==
-              "mac") {
-        isBackgroundVisible = true;
-      } else {
-        setState(() {
-          isBackgroundVisible = false;
-        });
-      }
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool isBackgroundVisible = MediaQuery.of(context).size.width > 900;
     final width = MediaQuery.of(context).size.width;
     var presentationWidth = MediaQuery.of(context).size.width * 0.7;
     var presentationHeight = MediaQuery.of(context).size.height * 0.7;
